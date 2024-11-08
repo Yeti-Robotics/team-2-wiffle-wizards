@@ -15,4 +15,5 @@ package frc.robot.constants;
  */
 public final class Constants {
     public static final int XBOX_CONTROLLER_PORT = 0;
+    public static Object TalonFXConstants;
 }
