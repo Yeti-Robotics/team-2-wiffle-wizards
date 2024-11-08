@@ -51,6 +51,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     private Command roll(double vel) {
+
         return startEnd(() -> setIntakeSpeed(vel), this::stop);
     }
 
