@@ -4,79 +4,65 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-
-    private final TalonFX intakeKraken;
+    private final TalonFX intakeMotor;
 
     public static class IntakeConstants {
-        public static final int INTAKE_KRAKEN_ID = 8;
-
-        public static final InvertedValue INTAKE_INVERSION = InvertedValue.Clockwise_Positive;
-        public static final NeutralModeValue INTAKE_NEUTRAL_MODE = NeutralModeValue.Brake;
-        public static final double INTAKE_POSITION_STATUS_FRAME = 0.05;
-        public static final double INTAKE_VELOCITY_STATUS_FRAME = 0.01;
+        public static final int krakenId = 9;
+        public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
+        public static final NeutralModeValue neutralMode = NeutralModeValue.Brake;
+        public static final double positionStatusFrame = 0.05;
+        public static final double velocityStatusFrame = 0.01;
     }
 
     public IntakeSubsystem() {
-        intakeKraken = new TalonFX(IntakeConstants.INTAKE_KRAKEN_ID, "canivoreBus");
-        var intakeConfigurator = intakeKraken.getConfigurator();
+        intakeMotor = new TalonFX(IntakeConstants.krakenId, "canivoreBus");
+        var intakeConfigurator = intakeMotor.getConfigurator();
         var configs = new TalonFXConfiguration();
 
-        configs.MotorOutput.Inverted = IntakeConstants.INTAKE_INVERSION;
-        configs.MotorOutput.NeutralMode = IntakeConstants.INTAKE_NEUTRAL_MODE;
+        configs.MotorOutput.Inverted = IntakeConstants.motorInversion;
+        configs.MotorOutput.NeutralMode = IntakeConstants.neutralMode;
         configs.FutureProofConfigs = Constants.TalonFXConstants.TALON_FUTURE_PROOF;
-        intakeKraken.getRotorVelocity().waitForUpdate(IntakeConstants.INTAKE_VELOCITY_STATUS_FRAME);
-        intakeKraken.getRotorPosition().waitForUpdate(IntakeConstants.INTAKE_POSITION_STATUS_FRAME);
+        intakeMotor.getRotorVelocity().waitForUpdate(IntakeConstants.velocityStatusFrame);
+        intakeMotor.getRotorPosition().waitForUpdate(IntakeConstants.positionStatusFrame);
         intakeConfigurator.apply(configs);
     }
 
     @Override
-    public void periodic() {
-        SmartDashboard.putData("intake kraken", intakeKraken);
-    }
+    public void periodic() {}
 
+    // Sets intake speed
     private void setIntakeSpeed(double speed) {
-        intakeKraken.set(speed);
+        intakeMotor.set(speed);
     }
 
+    // Stops intake movement
     private void stop() {
-        intakeKraken.stopMotor();
+        intakeMotor.stopMotor();
     }
 
-    private Command roll(double vel) {
-
-        return startEnd(() -> setIntakeSpeed(vel), this::stop);
+    // Command to spin the motor
+    private Command spin(double velocity, double timeout) {
+        return startEnd(() -> setIntakeSpeed(velocity), this::stop).withTimeout(timeout);
     }
 
-    /**
-     * Sucks up note into the robot
-     *
-     * @param vel positive speed in RPS
-     * @return {@code Command} instance
-     */
-    public Command rollIn(double vel) {
-        // TODO: add some kind of warning logging if a negative value is passed
-
-        return roll(Math.abs(vel));
+    // Command to raise the intake
+    public Command raise(double velocity, double time) {
+        if (velocity <= 0) {
+            System.out.println("Velocity shouldn't be negative or 0 when attempting to manipulate intake.");
+        }
+        return spin(Math.abs(velocity), 1);
     }
 
-    /**
-     * Ejects note from the robot
-     *
-     * @param vel negative speed in RPS
-     * @return {@code Command} instance
-     */
-    public Command rollOut(double vel) {
-        // TODO: add some kind of warning logging if a positive value is passed
-
-        return roll(-Math.abs(vel));
+    // Command to lower the intake
+    public Command lower(double velocity, double time) {
+        if (velocity <= 0) {
+            System.out.println("Velocity shouldn't be negative or 0 when attempting to manipulate intake.");
+        }
+        return spin(-Math.abs(velocity), 1);
     }
 }
-
