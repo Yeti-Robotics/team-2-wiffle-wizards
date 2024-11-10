@@ -2,12 +2,12 @@ package frc.robot.util.controllerUtils;
 
 import edu.wpi.first.wpilibj.XboxController;
 
-import java.util.Map;
-
 public class ControllerContainer {
+    // We never actually use this class
+    /*
     private final Controller[] controllers;
 
-    public ControllerContainer(Map<Integer, Controller.ControllerType> controllers) {
+    public ControllerContainer() {
         this.controllers = new Controller[controllers.size()];
 
         controllers.forEach((port, type) -> {
@@ -20,6 +20,8 @@ public class ControllerContainer {
                     break;
             }
         });
+
+
     }
 
     public Controller get(int controllerNumber) {
@@ -81,4 +83,6 @@ public class ControllerContainer {
             return super.getRawAxis(XboxController.Axis.kRightX.value);
         }
     }
+
+     */
 }
