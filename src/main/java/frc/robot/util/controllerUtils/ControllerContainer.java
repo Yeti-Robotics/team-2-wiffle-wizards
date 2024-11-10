@@ -3,6 +3,8 @@ package frc.robot.util.controllerUtils;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class ControllerContainer {
+    // We never actually use this class
+    /*
     private final Controller[] controllers;
 
     public ControllerContainer() {
@@ -18,6 +20,8 @@ public class ControllerContainer {
                     break;
             }
         });
+
+
     }
 
     public Controller get(int controllerNumber) {
@@ -79,4 +83,6 @@ public class ControllerContainer {
             return super.getRawAxis(XboxController.Axis.kRightX.value);
         }
     }
+
+     */
 }

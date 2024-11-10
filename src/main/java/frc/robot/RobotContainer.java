@@ -38,7 +38,7 @@ public class RobotContainer {
             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    public ControllerContainer controllerContainer = new ControllerContainer();
+    //public ControllerContainer controllerContainer = new ControllerContainer();
     //public SendableChooser<AutoConstants.AutoMode> autoChooser;
     private boolean autoNeedsRebuild = true;
     private Command auto;
