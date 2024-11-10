@@ -104,7 +104,7 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(intake.lower(0.7,1));
 
         // Collect electrolytes in
-        joystick.rightBumper().whileTrue(intake.spinRollers(0.7,4));
+        joystick.rightBumper().whileTrue(intake.spinRollers(0.7,2));
 
         // Raise lift based on speed of trigger
         joystick.leftTrigger().whileTrue(elevator.goUp(0.7));
