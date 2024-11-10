@@ -1,5 +1,5 @@
 # Dave the Wizard's Ball Pit
-Team 2's Robot Code
+The Wiffle Wizards' Robot Code
 
 ## Purpose
 The purpose of this project is to design a competitive and efficient robot for the YETI Robotics 2024 CADathon. Our goal is to create a robot that optimizes electrolyte (wiffle ball) handling and delivery in line with the competition’s unique requirements. Inspired from our strategy, we named our robot "Dave the Wizard's Ball Pit"
