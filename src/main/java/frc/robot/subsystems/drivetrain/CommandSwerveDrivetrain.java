@@ -1,4 +1,4 @@
-package frc.robot.subsystems.generated;
+package frc.robot.subsystems.drivetrain;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.drivetrain.generated.TunerConstants;
 import frc.robot.util.RobotDataPublisher;
 
 import java.util.function.Supplier;

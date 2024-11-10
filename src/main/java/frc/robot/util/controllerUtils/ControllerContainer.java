@@ -2,12 +2,10 @@ package frc.robot.util.controllerUtils;
 
 import edu.wpi.first.wpilibj.XboxController;
 
-import java.util.Map;
-
 public class ControllerContainer {
     private final Controller[] controllers;
 
-    public ControllerContainer(Map<Integer, Controller.ControllerType> controllers) {
+    public ControllerContainer() {
         this.controllers = new Controller[controllers.size()];
 
         controllers.forEach((port, type) -> {
