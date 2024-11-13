@@ -81,13 +81,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Method to move the elevator down
     public void moveDown(double speed) {
-        if (!bottomLimitSwitch.get()) {
-            elevatorMotor1.set(-Math.abs(speed));
-            elevatorMotor2.set(-Math.abs(speed));
+        elevatorMotor1.set(-Math.abs(speed));
+        elevatorMotor2.set(-Math.abs(speed));
 
-        } else {
-            stop();
-        }
     }
 
     // Stop the elevator motor
@@ -107,30 +103,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     // Check if the door is at the bottom
-    public boolean isAtBottom() {
-        return bottomLimitSwitch.get();
-    }
+    public boolean isAtBottom() {return bottomLimitSwitch.get();}
 
     // Check if the door is at the top
-    public boolean isAtTop() {
-        return topLimitSwitch.get();
-    }
+    public boolean isAtTop() {return topLimitSwitch.get();}
 
-    private Command moveDownAndStop(double speed){
-        return startEnd(() -> moveDown(speed), this::stop);
-    }
+    public Command moveDownAndStop(double speed){return startEnd(() -> moveDown(speed), this::stop).until(this::isAtBottom);}
 
-    private Command moveUpAndStop(double speed){
-        return startEnd(() -> moveUp(speed), this::stop);
-    }
+    public Command moveUpAndStop(double speed){return startEnd(() -> moveUp(speed), this::stop).until(this::isAtTop);}
 
-    public Command goDown(double speed) {
-        return runOnce(()-> moveDownAndStop(speed).until(this::isAtBottom));
-    }
-
-    public Command goUp(double speed) {
-        return runOnce(()-> moveUpAndStop(speed).until(this::isAtTop));
-    }
 
     @Override
     public void periodic() {

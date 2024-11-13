@@ -107,20 +107,12 @@ public class DoorSubsystem extends SubsystemBase {
         return topLimitSwitch.get();
     }
 
-    private Command moveDownAndStop(double speed){
-        return startEnd(() -> moveDown(speed), this::stop);
+    public Command moveDownAndStop(double speed){
+        return startEnd(() -> moveDown(speed), this::stop).until(this::isAtBottom);
     }
 
-    private Command moveUpAndStop(double speed){
-        return startEnd(() -> moveUp(speed), this::stop);
-    }
-
-    public Command goDown(double speed) {
-        return runOnce(()-> moveDownAndStop(speed).until(this::isAtBottom));
-    }
-
-    public Command goUp(double speed) {
-        return runOnce(()-> moveUpAndStop(speed).until(this::isAtTop));
+    public Command moveUpAndStop(double speed){
+        return startEnd(() -> moveUp(speed), this::stop).until(this::isAtTop);
     }
 
     @Override

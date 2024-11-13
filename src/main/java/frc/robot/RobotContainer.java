@@ -108,19 +108,22 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(intake.lower(0.7,1));
 
         // Collect electrolytes in
-        joystick.rightBumper().whileTrue(intake.spinRollers(0.7,2));
+        joystick.rightBumper().whileTrue(intake.spinRollers(0.7));
 
         // Raise lift based on speed of trigger
-        joystick.leftTrigger().whileTrue(elevator.goUp(0.7));
+        joystick.leftTrigger().whileTrue(elevator.moveUpAndStop(0.7));
 
         // Move door based on speed of trigger
-        joystick.rightTrigger().whileTrue(door.goUp(joystick.getRightTriggerAxis()));
+        joystick.rightTrigger().whileTrue(door.moveUpAndStop(joystick.getRightTriggerAxis()));
 
         // Pull intake back in
         joystick.a().onTrue(intake.raise(0.7,1));
 
         // Close door
-        joystick.x().onTrue(door.goDown(0.6));
+        joystick.b().onTrue(door.moveDownAndStop(0.7));
+
+        // Lower lift
+        joystick.x().onTrue(elevator.moveDownAndStop(0.7));
         
         // Swerve lock
         joystick.y().whileTrue(drivetrain

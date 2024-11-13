@@ -75,8 +75,8 @@ public class IntakeSubsystem extends SubsystemBase {
         return startEnd(() -> setIntakeSpeed(velocity), this::stop).withTimeout(timeout);
     }
 
-    public Command spinRollers(double speed, double timeout) {
-        return startEnd(() -> setRollerSpeed(speed), this::stop).withTimeout(timeout);
+    public Command spinRollers(double speed) {
+        return startEnd(() -> setRollerSpeed(speed), this::stop);
     }
 
     // Command to raise the intake
