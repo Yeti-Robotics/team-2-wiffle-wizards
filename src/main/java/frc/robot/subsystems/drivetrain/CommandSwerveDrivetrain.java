@@ -37,6 +37,7 @@ import java.util.function.Supplier;
  * so it can be used in command-based projects easily.
  */
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
+    // Constants/variables for swerve drive
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private final Rotation2d BluePerspectiveRotation = Rotation2d.fromDegrees(0);
     private final Rotation2d RedPerspectiveRotation = Rotation2d.fromDegrees(180);
@@ -45,6 +46,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private boolean hasAppliedPerspective = false;
+
     public static final double SUPPLY_CURRENT_LIMIT = 60;
     public static final boolean SUPPLY_CURRENT_LIMIT_ENABLE = true;
     public static final double SUPPLY_CURRENT_LIMIT_CURRENT_THRESHOLD = 65;
@@ -63,6 +65,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.25); //PLACEHOLDER
     private static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(22.25); //PLACEHOLDER
 
+    // Kinematic module setup
     public static final SwerveDriveKinematics DRIVE_KINEMATICS =
             new SwerveDriveKinematics(
                     // Front left
@@ -81,6 +84,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     private final RobotDataPublisher<Pose2d> posePublisher = new RobotDataPublisher<>();
 
+    // Swerve drive configuration
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configurePathPlanner();
@@ -112,6 +116,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
+    // PathPlanner Configuration
     private void configurePathPlanner() {
         double driveRad = 0;
         for (var moduleLocation : m_moduleLocations) {
@@ -141,6 +146,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 this);
     }
 
+    // Applies swerve request
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
     }
@@ -149,10 +155,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return new PathPlannerAuto(pathName);
     }
 
+    // Get chassis speeds from the wheels
     public ChassisSpeeds getChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
+    // Starts simulation threads for PID to behave well
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -168,6 +176,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+    // Sets power supply limits for the swerve modules
     public void setDriveCurrentLimits() {
         var currentLimitConfigs = new CurrentLimitsConfigs();
 
@@ -230,6 +239,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
+    // periodic() is a function that runs repeatedly
     @Override
     public void periodic() {
         publisher.set(super.getState().ModuleStates);
@@ -247,6 +257,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 ? new Pose2d(0.0, 5.55, Rotation2d.fromRotations(0))
                 : new Pose2d(0.0, 2.45, Rotation2d.fromRotations(0));
 
+        // Sends info to DS Smart Dashboard
         Pose2d robotPose = this.getState().Pose;
         posePublisher.publish(robotPose);
         Pose2d relativeSpeaker = robotPose.relativeTo(speakerPose);
