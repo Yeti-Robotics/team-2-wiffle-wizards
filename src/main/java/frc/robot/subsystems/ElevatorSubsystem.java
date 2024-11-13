@@ -103,22 +103,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     // Check if the door is at the bottom
-    public boolean isAtBottom() {
-        return bottomLimitSwitch.get();
-    }
+    public boolean isAtBottom() {return bottomLimitSwitch.get();}
 
     // Check if the door is at the top
-    public boolean isAtTop() {
-        return topLimitSwitch.get();
-    }
+    public boolean isAtTop() {return topLimitSwitch.get();}
 
-    public Command moveDownAndStop(double speed){
-        return startEnd(() -> moveDown(speed), this::stop).until(this::isAtBottom);
-    }
+    public Command moveDownAndStop(double speed){return startEnd(() -> moveDown(speed), this::stop).until(this::isAtBottom);}
 
-    public Command moveUpAndStop(double speed){
-        return startEnd(() -> moveUp(speed), this::stop).until(this::isAtTop);
-    }
+    public Command moveUpAndStop(double speed){return startEnd(() -> moveUp(speed), this::stop).until(this::isAtTop);}
 
 
     @Override
