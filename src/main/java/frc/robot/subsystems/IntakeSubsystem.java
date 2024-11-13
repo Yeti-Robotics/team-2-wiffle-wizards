@@ -80,18 +80,18 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     // Command to raise the intake
-    public Command raise(double velocity, double time) {
+    public Command raise(double velocity, double timeout) {
         if (velocity <= 0) {
             System.out.println("Velocity shouldn't be negative or 0 when attempting to manipulate intake.");
         }
-        return moveIntake(Math.abs(velocity), 1);
+        return moveIntake(Math.abs(velocity), timeout);
     }
 
     // Command to lower the intake
-    public Command lower(double velocity, double time) {
+    public Command lower(double velocity, double timeout) {
         if (velocity <= 0) {
             System.out.println("Velocity shouldn't be negative or 0 when attempting to manipulate intake.");
         }
-        return moveIntake(-Math.abs(velocity), 1);
+        return moveIntake(-Math.abs(velocity), timeout);
     }
 }

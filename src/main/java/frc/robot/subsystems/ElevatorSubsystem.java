@@ -93,7 +93,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Stop the elevator motor
     public void stop() {
         elevatorMotor1.stopMotor();
-        elevatorMotor2.stopMotor();;
+        elevatorMotor2.stopMotor();
 
     }
 

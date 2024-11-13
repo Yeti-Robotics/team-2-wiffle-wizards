@@ -26,9 +26,11 @@ import frc.robot.util.controllerUtils.ControllerContainer;
 
 public class RobotContainer {
 
+    // Subsystems
     public final ElevatorSubsystem elevator = new ElevatorSubsystem();
     public final IntakeSubsystem intake = new IntakeSubsystem();
     public final DoorSubsystem door = new DoorSubsystem();
+
     public final CommandXboxController joystick = new CommandXboxController(1); // My joystick
 
     final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -43,15 +45,18 @@ public class RobotContainer {
     private boolean autoNeedsRebuild = true;
     private Command auto;
 
+    // Robot Command Initialization
     private final RobotCommands robotCommands = new RobotCommands(
             intake,  drivetrain, elevator, door
     );
 
     public RobotContainer() {
+        // Dump command initialization
         NamedCommands.registerCommand("dump", Commands.sequence(
 
         ));
 
+        // PathPlanner field setup
         var field = new Field2d();
         SmartDashboard.putData("Field", field);
 
@@ -83,7 +88,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(
                         () ->
@@ -115,10 +119,8 @@ public class RobotContainer {
         // Pull intake back in
         joystick.a().onTrue(intake.raise(0.7,1));
 
-        //Close door
+        // Close door
         joystick.x().onTrue(door.goDown(0.6));
-
-        //
         
         // Swerve lock
         joystick.y().whileTrue(drivetrain

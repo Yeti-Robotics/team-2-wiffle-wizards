@@ -33,7 +33,10 @@ import static edu.wpi.first.apriltag.AprilTagFields.k2024Crescendo;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    // Initializing the XBOX Controller Port
     public static final int XBOX_CONTROLLER_PORT = 0;
+
+    // Initializing TalonFXConstants
     public static class TalonFXConstants {
         public static final boolean TALON_FUTURE_PROOF = true;
         public static final String CANIVORE_NAME = "canivoreBus";
