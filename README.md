@@ -17,6 +17,7 @@ Cheesy Poofs Inspired Design: The intake is based on Team 254’s Cheesy Poofs i
 
 ### Elevator and Slanted Box
 Elevator Mechanism: The elevator lifts the floor holding the electrolytes to the height of the dunk tank.
+<br>
 Slanted Box Design: The box’s base is angled, so when the elevator reaches the top, the electrolytes roll down the slope naturally for easy unloading.
 
 ### Flap Release System
@@ -24,5 +25,7 @@ Controlled Release: At the top of the elevator, a flap opens to allow the electr
 
 ### Operation Summary
 Intake Electrolytes: The intake collects the wiffle balls.
+<br>
 Elevate and Position: The elevator lifts the angled box to the delivery height.
+<br>
 Controlled Release: The flap opens at the top, allowing the wiffle balls to roll down the ramp and exit smoothly.
