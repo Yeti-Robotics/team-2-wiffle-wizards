@@ -34,7 +34,7 @@ public class DoorSubsystem extends SubsystemBase {
 
     public DoorSubsystem() {
         // Initialize TalonFX motor with CAN ID
-        doorMotor = new TalonFX(DoorConstants.DOOR_MOTOR_ID);
+        doorMotor = new TalonFX(DoorConstants.DOOR_MOTOR_ID, "rio");
         bottomLimitSwitch = new DigitalInput(0);
         topLimitSwitch = new DigitalInput(1);
 
@@ -118,8 +118,11 @@ public class DoorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Reset encoder position if the door is at the bottom
+        /*
         if (isAtBottom()) {
             doorMotor.setPosition(0.0);
         }
+
+         */
     }
 }

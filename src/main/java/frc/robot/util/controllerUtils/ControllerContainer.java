@@ -3,14 +3,16 @@ package frc.robot.util.controllerUtils;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class ControllerContainer {
-    // We never actually use this class
+
     /*
-    private final Controller[] controllers;
+    private final Controller[] controllers = new Controller[0];
 
     public ControllerContainer() {
         this.controllers = new Controller[controllers.size()];
 
         controllers.forEach((port, type) -> {
+            Controller.ControllerType type = Controller.ControllerType.CUSTOM;
+
             switch (type) {
                 case CUSTOM:
                     this.controllers[port] = new CustomController(port);
@@ -83,6 +85,6 @@ public class ControllerContainer {
             return super.getRawAxis(XboxController.Axis.kRightX.value);
         }
     }
+    */
 
-     */
 }
