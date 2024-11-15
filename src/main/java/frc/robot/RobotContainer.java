@@ -23,6 +23,8 @@ import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
 import frc.robot.util.controllerUtils.ControllerContainer;
 
+import static java.lang.Math.abs;
+
 
 public class RobotContainer {
 
@@ -111,10 +113,10 @@ public class RobotContainer {
         joystick.rightBumper().whileTrue(intake.spinRollers(0.7));
 
         // Raise lift based on speed of trigger
-        joystick.leftTrigger().whileTrue(elevator.moveUpAndStop(0.7));
+        joystick.leftTrigger().whileTrue(elevator.moveUpAndStop(abs(joystick.getLeftTriggerAxis())));
 
         // Move door based on speed of trigger
-        joystick.rightTrigger().whileTrue(door.moveUpAndStop(joystick.getRightTriggerAxis()));
+        joystick.rightTrigger().whileTrue(door.moveUpAndStop(abs(joystick.getRightTriggerAxis())));
 
         // Pull intake back in
         joystick.a().onTrue(intake.raise(0.7,1));

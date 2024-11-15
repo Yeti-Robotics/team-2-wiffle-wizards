@@ -85,6 +85,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final RobotDataPublisher<Pose2d> posePublisher = new RobotDataPublisher<>();
 
     // Swerve drive configuration
+
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configurePathPlanner();
@@ -98,6 +99,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             startSimThread();
         }
     }
+
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);

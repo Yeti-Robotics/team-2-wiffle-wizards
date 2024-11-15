@@ -31,10 +31,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem() {
         // Initialize TalonFX motor with CAN ID
-        elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_ID_1);
-        elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_ID_2);
-        bottomLimitSwitch = new DigitalInput(0);
-        topLimitSwitch = new DigitalInput(1);
+        elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_ID_1, "rio");
+        elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_ID_2, "rio");
+        bottomLimitSwitch = new DigitalInput(2);
+        topLimitSwitch = new DigitalInput(3);
 
         // Configuration setup
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -116,10 +116,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Reset encoder position if the elevator is at the bottom
+        /*
         if (isAtBottom()) {
             elevatorMotor1.setPosition(0.0);
             elevatorMotor2.setPosition(0.0);
 
         }
+
+         */
     }
 }

@@ -15,9 +15,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Class containing the constants for the intake
     public static class IntakeConstants {
-        public static final int intakeId = 9;
-        public static final int roller1Id = 10;
-        public static final int roller2Id = 11;
+        public static final int intakeId = 7;
+        public static final int roller1Id = 8;
+        public static final int roller2Id = 9;
         public static final InvertedValue motorInversion = InvertedValue.Clockwise_Positive;
         public static final InvertedValue rollerInversion = InvertedValue.CounterClockwise_Positive;
         public static final NeutralModeValue neutralMode = NeutralModeValue.Brake;
@@ -27,9 +27,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         // Intake movement motor and roller motor initialization
-        intakeMotor = new TalonFX(IntakeConstants.intakeId, "canivoreBus");
-        roller1 = new TalonFX(IntakeConstants.roller1Id, "canivoreBus");
-        roller2 = new TalonFX(IntakeConstants.roller2Id, "canivoreBus");
+        intakeMotor = new TalonFX(IntakeConstants.intakeId, "rio");
+        roller1 = new TalonFX(IntakeConstants.roller1Id, "rio");
+        roller2 = new TalonFX(IntakeConstants.roller2Id, "rio");
 
         // Intake motor configurator
         var intakeConfigurator = intakeMotor.getConfigurator();
@@ -81,17 +81,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Command to raise the intake
     public Command raise(double velocity, double timeout) {
-        if (velocity <= 0) {
-            System.out.println("Velocity shouldn't be negative or 0 when attempting to manipulate intake.");
-        }
+
         return moveIntake(Math.abs(velocity), timeout);
     }
 
     // Command to lower the intake
     public Command lower(double velocity, double timeout) {
-        if (velocity <= 0) {
-            System.out.println("Velocity shouldn't be negative or 0 when attempting to manipulate intake.");
-        }
         return moveIntake(-Math.abs(velocity), timeout);
     }
 }
