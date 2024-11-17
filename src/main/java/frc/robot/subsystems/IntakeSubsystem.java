@@ -1,17 +1,25 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.sim.PhysicsSim;
 
 public class IntakeSubsystem extends SubsystemBase {
-    private final TalonFX intakeMotor;
+    public final TalonFX intakeMotor;
     private final TalonFX roller1;
     private final TalonFX roller2;
+    private final CANcoder intakeEncoder;
+    private final CANcoder roll1Encoder;
+    private final CANcoder roll2Encoder;
+
 
     // Class containing the constants for the intake
     public static class IntakeConstants {
@@ -30,6 +38,10 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor = new TalonFX(IntakeConstants.intakeId, "rio");
         roller1 = new TalonFX(IntakeConstants.roller1Id, "rio");
         roller2 = new TalonFX(IntakeConstants.roller2Id, "rio");
+        intakeEncoder = new CANcoder(7, "canbus");
+        roll1Encoder = new CANcoder(8, "canbus");
+        roll2Encoder = new CANcoder(9, "canbus");
+
 
         // Intake motor configurator
         var intakeConfigurator = intakeMotor.getConfigurator();
@@ -52,10 +64,22 @@ public class IntakeSubsystem extends SubsystemBase {
         roller2.getRotorVelocity().waitForUpdate(IntakeConstants.velocityStatusFrame);
         rollerConfigurator1.apply(rollerConfigs);
         rollerConfigurator2.apply(rollerConfigs);
+
+        if (Utils.isSimulation()) {
+            PhysicsSim.getInstance().addTalonFX(intakeMotor,intakeEncoder, 26,0.001);
+            PhysicsSim.getInstance().addTalonFX(roller1,roll1Encoder, 1,0.001);
+            PhysicsSim.getInstance().addTalonFX(roller2,roll2Encoder, 1,0.001);
+
+        }
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+        SmartDashboard.putData("intake kraken", intakeMotor);
+        SmartDashboard.putData("roller kraken 1", roller1);
+        SmartDashboard.putData("roller kraken 2", roller1);
+
+    }
 
     // Sets intake speed
     private void setIntakeSpeed(double speed) {

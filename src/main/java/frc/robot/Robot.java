@@ -5,9 +5,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.sim.PhysicsSim;
 
 
 /**
@@ -18,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
-
     private RobotContainer robotContainer;
 
 
@@ -134,5 +136,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void simulationPeriodic() {
+        if (robotContainer != null) {
+            robotContainer.simulationPeriodic();
+        }
+        PhysicsSim.getInstance().run();
+
     }
 }

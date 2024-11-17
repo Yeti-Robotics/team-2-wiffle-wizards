@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.sim.PhysicsSim;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
@@ -55,7 +56,6 @@ public class RobotContainer {
     public RobotContainer() {
         // Dump command initialization
         NamedCommands.registerCommand("dump", Commands.sequence(
-
         ));
 
         // PathPlanner field setup
@@ -130,6 +130,11 @@ public class RobotContainer {
         // Swerve lock
         joystick.y().whileTrue(drivetrain
                 .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));    }
+
+    public void simulationPeriodic() {
+        PhysicsSim.getInstance().run();
+
+    }
     /*
     public void buildAutoChooser() {
         var namedCommands = new AutoNamedCommands(intake, shooter, pivot, arm, robotCommands);
