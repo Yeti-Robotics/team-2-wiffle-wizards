@@ -1,14 +1,19 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.sim.PhysicsSim;
+
 
 public class ElevatorSubsystem extends SubsystemBase {
     // Motor and sensor declarations
@@ -16,6 +21,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final TalonFX elevatorMotor2;
     private final DigitalInput bottomLimitSwitch;
     private final DigitalInput topLimitSwitch;
+    private final CANcoder elev1Encoder;
+    private final CANcoder elev2Encoder;
 
     // Constants
     private static final int ELEVATOR_MOTOR_ID_1 = 4;
@@ -33,8 +40,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Initialize TalonFX motor with CAN ID
         elevatorMotor1 = new TalonFX(ELEVATOR_MOTOR_ID_1, "rio");
         elevatorMotor2 = new TalonFX(ELEVATOR_MOTOR_ID_2, "rio");
-        bottomLimitSwitch = new DigitalInput(2);
-        topLimitSwitch = new DigitalInput(3);
+        bottomLimitSwitch = new DigitalInput(6);
+        topLimitSwitch = new DigitalInput(7);
+        elev1Encoder = new CANcoder(4,"canbus");
+        elev2Encoder = new CANcoder(5,"canbus");
 
         // Configuration setup
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -66,6 +75,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Set motor to brake mode
         elevatorMotor1.setNeutralMode(NeutralModeValue.Brake);
         elevatorMotor2.setNeutralMode(NeutralModeValue.Brake);
+
+        if (Utils.isSimulation()) {
+            PhysicsSim.getInstance().addTalonFX(elevatorMotor1,elev1Encoder, 11,0.001);
+            PhysicsSim.getInstance().addTalonFX(elevatorMotor2,elev2Encoder, 11,0.001);
+        }
     }
 
     // Method to move the elevator up
@@ -108,21 +122,21 @@ public class ElevatorSubsystem extends SubsystemBase {
     // Check if the door is at the top
     public boolean isAtTop() {return topLimitSwitch.get();}
 
-    public Command moveDownAndStop(double speed){return startEnd(() -> moveDown(speed), this::stop).until(this::isAtBottom);}
+    public Command moveDownAndStop(double speed){
+        return startEnd(() -> moveDown(speed), this::stop).until(this::isAtBottom);
+    }
 
-    public Command moveUpAndStop(double speed){return startEnd(() -> moveUp(speed), this::stop).until(this::isAtTop);}
+    public Command moveUpAndStop(double speed){
+        return startEnd(() -> moveUp(speed), this::stop).until(this::isAtTop);
+    }
 
 
     @Override
     public void periodic() {
         // Reset encoder position if the elevator is at the bottom
-        /*
-        if (isAtBottom()) {
-            elevatorMotor1.setPosition(0.0);
-            elevatorMotor2.setPosition(0.0);
-
-        }
-
-         */
+        SmartDashboard.putData("elevator kraken 1", elevatorMotor1);
+        SmartDashboard.putData("elevator kraken 2", elevatorMotor2);
+        SmartDashboard.putData("elevator top limit", topLimitSwitch);
+        SmartDashboard.putData("elevator bottom limit", bottomLimitSwitch);
     }
 }

@@ -1,21 +1,26 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.sim.PhysicsSim;
 
 
 public class DoorSubsystem extends SubsystemBase {
     // Motor and sensor declarations
-    private final TalonFX doorMotor;
+    public final TalonFX doorMotor;
     private final DigitalInput bottomLimitSwitch;
     private final DigitalInput topLimitSwitch;
+    public final CANcoder doorEncoder;
 
     // Constants
     public static class DoorConstants{
@@ -31,12 +36,12 @@ public class DoorSubsystem extends SubsystemBase {
 
     }
 
-
     public DoorSubsystem() {
         // Initialize TalonFX motor with CAN ID
         doorMotor = new TalonFX(DoorConstants.DOOR_MOTOR_ID, "rio");
-        bottomLimitSwitch = new DigitalInput(0);
-        topLimitSwitch = new DigitalInput(1);
+        bottomLimitSwitch = new DigitalInput(4);
+        topLimitSwitch = new DigitalInput(5);
+        doorEncoder = new CANcoder(6,"canbus");
 
         // Configuration setup
         TalonFXConfiguration config = new TalonFXConfiguration();
@@ -65,9 +70,16 @@ public class DoorSubsystem extends SubsystemBase {
 
         // Set motor to brake mode
         doorMotor.setNeutralMode(NeutralModeValue.Brake);
+
+        if (Utils.isSimulation()) {
+            PhysicsSim.getInstance().addTalonFX(doorMotor,doorEncoder, 4,0.001);
+            System.out.println("ADD DOOR MOTOR PLEASE");
+        }
+
+
     }
 
-    // Method to move the door up
+    // Move door up if it hasn't reached top
     public void moveUp(double speed) {
         if (!topLimitSwitch.get()) {
             doorMotor.set(Math.abs(speed));
@@ -76,7 +88,7 @@ public class DoorSubsystem extends SubsystemBase {
         }
     }
 
-    // Method to move the door down
+    // Move door down if it hasn't reached bottom
     public void moveDown(double speed) {
         if (!bottomLimitSwitch.get()) {
             doorMotor.set(-Math.abs(speed));
@@ -90,19 +102,19 @@ public class DoorSubsystem extends SubsystemBase {
         doorMotor.stopMotor();
     }
 
-    // Method to move the door to a specific position using Motion Magic
+    // Move the door to a specific position using Motion Magic
     public void setPosition(double targetPosition) {
         MotionMagicExpoVoltage motionMagicVoltage = new MotionMagicExpoVoltage(
                 targetPosition, true, 0.0, 0, true, false, false);
         doorMotor.setControl(motionMagicVoltage);
     }
 
-    // Check if the door is at the bottom
+    // Check if door is at the bottom
     public boolean isAtBottom() {
         return bottomLimitSwitch.get();
     }
 
-    // Check if the door is at the top
+    // Check if door is at the top
     public boolean isAtTop() {
         return topLimitSwitch.get();
     }
@@ -118,11 +130,9 @@ public class DoorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Reset encoder position if the door is at the bottom
-        /*
-        if (isAtBottom()) {
-            doorMotor.setPosition(0.0);
-        }
+        SmartDashboard.putData("door kraken", doorMotor);
+        SmartDashboard.putData("door top limit", topLimitSwitch);
+        SmartDashboard.putData("door bottom limit", bottomLimitSwitch);
 
-         */
     }
 }
