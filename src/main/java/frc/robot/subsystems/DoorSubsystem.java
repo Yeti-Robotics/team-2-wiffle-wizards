@@ -20,7 +20,7 @@ public class DoorSubsystem extends SubsystemBase {
     public final TalonFX doorMotor;
     private final DigitalInput bottomLimitSwitch;
     private final DigitalInput topLimitSwitch;
-    private final CANcoder doorEncoder;
+    public final CANcoder doorEncoder;
 
     // Constants
     public static class DoorConstants{
@@ -73,7 +73,10 @@ public class DoorSubsystem extends SubsystemBase {
 
         if (Utils.isSimulation()) {
             PhysicsSim.getInstance().addTalonFX(doorMotor,doorEncoder, 4,0.001);
+            System.out.println("ADD DOOR MOTOR PLEASE");
         }
+
+
     }
 
     // Move door up if it hasn't reached top

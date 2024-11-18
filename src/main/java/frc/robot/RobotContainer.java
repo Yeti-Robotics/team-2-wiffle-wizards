@@ -24,6 +24,8 @@ import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
 import frc.robot.util.controllerUtils.ControllerContainer;
 
+import java.lang.reflect.Field;
+
 import static java.lang.Math.abs;
 
 
@@ -33,8 +35,9 @@ public class RobotContainer {
     public final ElevatorSubsystem elevator = new ElevatorSubsystem();
     public final IntakeSubsystem intake = new IntakeSubsystem();
     public final DoorSubsystem door = new DoorSubsystem();
+    private final Field2d m_field = new Field2d();
 
-    public final CommandXboxController joystick = new CommandXboxController(1); // My joystick
+    public final CommandXboxController joystick = new CommandXboxController(0); // My joystick
 
     final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -59,7 +62,7 @@ public class RobotContainer {
         ));
 
         // PathPlanner field setup
-        var field = new Field2d();
+        final Field2d field = new Field2d();
         SmartDashboard.putData("Field", field);
 
 
@@ -121,18 +124,25 @@ public class RobotContainer {
         // Pull intake back in
         joystick.a().onTrue(intake.raise(0.7,1));
 
-        // Close door
-        joystick.b().onTrue(door.moveDownAndStop(0.7));
-
         // Lower lift
-        joystick.x().onTrue(elevator.moveDownAndStop(0.7));
-        
+        joystick.b().onTrue(elevator.moveDownAndStop(0.7));
+
+        // Close door
+        joystick.y().onTrue(door.moveDownAndStop(0.7));
+
         // Swerve lock
-        joystick.y().whileTrue(drivetrain
+        joystick.x().whileTrue(drivetrain
                 .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));    }
+
+    public void simulationInit(){
+        SmartDashboard.putData("Field", m_field);
+
+    }
 
     public void simulationPeriodic() {
         PhysicsSim.getInstance().run();
+        //Unfortunately not finished by deadline :(
+        //m_field.setRobotPose(m_odometry.getPoseMeters());
 
     }
     /*

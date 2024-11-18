@@ -22,7 +22,7 @@ public class PhysicsSim {
     /**
      * Adds a TalonFX controller to the simulator.
      *
-     * @param talonFX
+          * @param talonFX
      *        The TalonFX device
      * @param can
      *        The CANcoder device
@@ -35,6 +35,7 @@ public class PhysicsSim {
         if (talonFX != null) {
             TalonFXSimProfile simTalonFX = new TalonFXSimProfile(talonFX, can, gearRatio, rotorInertia);
             _simProfiles.add(simTalonFX);
+            System.out.println("PLEASE ADD MOTOR");
         }
     }
 

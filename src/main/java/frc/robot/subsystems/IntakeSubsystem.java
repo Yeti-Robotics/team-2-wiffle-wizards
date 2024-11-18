@@ -13,7 +13,7 @@ import frc.robot.constants.Constants;
 import frc.robot.sim.PhysicsSim;
 
 public class IntakeSubsystem extends SubsystemBase {
-    public final TalonFX intakeMotor;
+    private final TalonFX intakeMotor;
     private final TalonFX roller1;
     private final TalonFX roller2;
     private final CANcoder intakeEncoder;
@@ -69,7 +69,6 @@ public class IntakeSubsystem extends SubsystemBase {
             PhysicsSim.getInstance().addTalonFX(intakeMotor,intakeEncoder, 26,0.001);
             PhysicsSim.getInstance().addTalonFX(roller1,roll1Encoder, 1,0.001);
             PhysicsSim.getInstance().addTalonFX(roller2,roll2Encoder, 1,0.001);
-
         }
     }
 

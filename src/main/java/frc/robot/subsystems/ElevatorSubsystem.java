@@ -17,8 +17,8 @@ import frc.robot.sim.PhysicsSim;
 
 public class ElevatorSubsystem extends SubsystemBase {
     // Motor and sensor declarations
-    public final TalonFX elevatorMotor1;
-    public final TalonFX elevatorMotor2;
+    private final TalonFX elevatorMotor1;
+    private final TalonFX elevatorMotor2;
     private final DigitalInput bottomLimitSwitch;
     private final DigitalInput topLimitSwitch;
     private final CANcoder elev1Encoder;

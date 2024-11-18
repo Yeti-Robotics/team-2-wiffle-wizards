@@ -2,10 +2,8 @@ package frc.robot.sim;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.sim.PhysicsSim.SimProfile;
@@ -15,7 +13,7 @@ import frc.robot.sim.PhysicsSim.SimProfile;
  */
 class TalonFXSimProfile extends SimProfile {
     private static final double kMotorResistance = 0.002; // Assume 2mOhm resistance for voltage drop calculation
-    private final TalonFXSimState _talonFXSim;
+    private final TalonFX _talonFX;
     private final CANcoder _canCoder;
     private final double _gearRatio;
 
@@ -34,14 +32,10 @@ class TalonFXSimProfile extends SimProfile {
      *                        Rotational Inertia of the mechanism at the rotor
      */
     public TalonFXSimProfile(final TalonFX talonFX, final CANcoder canCoder, final double gearRatio, final double rotorInertia) {
-        this._talonFXSim = talonFX.getSimState();
+        this._talonFX = talonFX;
         this._canCoder = canCoder;
         this._gearRatio = gearRatio;
-
-        var gearbox = DCMotor.getKrakenX60Foc(1);
-        //this._motorSim = new DCMotorSim(gearbox, gearRatio, 0.001);
-        this._motorSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(gearbox, rotorInertia, gearRatio), gearbox,gearRatio);
-
+        this._motorSim = new DCMotorSim(DCMotor.getKrakenX60Foc(1), gearRatio, rotorInertia);
     }
 
     /**
@@ -53,7 +47,7 @@ class TalonFXSimProfile extends SimProfile {
      */
     public void run() {
         // DEVICE SPEED SIMULATION
-        _motorSim.setInputVoltage(_talonFXSim.getMotorVoltage());
+        _motorSim.setInputVoltage(_talonFX.getSimState().getMotorVoltage());
 
         _motorSim.update(getPeriod());
 
@@ -61,10 +55,10 @@ class TalonFXSimProfile extends SimProfile {
         final double position_rot = _motorSim.getAngularPositionRotations() * _gearRatio;
         final double velocity_rps = Units.radiansToRotations(_motorSim.getAngularVelocityRadPerSec()) * _gearRatio;
 
-        _talonFXSim.setRawRotorPosition(position_rot);
-        _talonFXSim.setRotorVelocity(velocity_rps);
+        _talonFX.getSimState().setRawRotorPosition(position_rot);
+        _talonFX.getSimState().setRotorVelocity(velocity_rps);
 
-        _talonFXSim.setSupplyVoltage(12 - _talonFXSim.getSupplyCurrent() * kMotorResistance);
+        _talonFX.getSimState().setSupplyVoltage(12 - _talonFX.getSimState().getSupplyCurrent() * kMotorResistance);
 
         _canCoder.getSimState().setRawPosition(position_rot / _gearRatio);
         _canCoder.getSimState().setVelocity(velocity_rps / _gearRatio);
