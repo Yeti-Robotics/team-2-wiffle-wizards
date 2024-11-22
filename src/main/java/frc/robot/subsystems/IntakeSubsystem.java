@@ -93,13 +93,19 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.stopMotor();
     }
 
+    // Stops roller movement
+    private void stop_rollers() {
+        roller1.stopMotor();
+        roller2.stopMotor();
+    }
+
     // Command to spin the motor
     private Command moveIntake(double velocity, double timeout) {
         return startEnd(() -> setIntakeSpeed(velocity), this::stop).withTimeout(timeout);
     }
 
     public Command spinRollers(double speed) {
-        return startEnd(() -> setRollerSpeed(speed), this::stop);
+        return startEnd(() -> setRollerSpeed(speed), this::stop_rollers);
     }
 
     // Command to raise the intake
