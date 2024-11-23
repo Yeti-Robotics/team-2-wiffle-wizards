@@ -10,9 +10,14 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.sim.PhysicsSim;
@@ -26,7 +31,17 @@ import frc.robot.sim.PhysicsSim;
 public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private static final double kMetersPerPulse = 0.01;
+    private static final double kElevatorMinimumLength = 0.5;
 
+    private final PWMSparkMax m_elevatorMotor = new PWMSparkMax(0);
+    private final PWMSparkMax m_wristMotor = new PWMSparkMax(1);
+    private final AnalogPotentiometer m_wristPot = new AnalogPotentiometer(1, 90);
+    private final Encoder m_elevatorEncoder = new Encoder(0, 1);
+    private final XboxController m_joystick = new XboxController(1);
+
+    private MechanismLigament2d m_elevator;
+    private MechanismLigament2d m_wrist;
 
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -37,6 +52,22 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+        m_elevatorEncoder.setDistancePerPulse(kMetersPerPulse);
+
+        // the main mechanism object
+        Mechanism2d mech = new Mechanism2d(3, 3);
+        // the mechanism root node
+        MechanismRoot2d root = mech.getRoot("climber", 2, 0);
+
+        // MechanismLigament2d objects represent each "section"/"stage" of the mechanism, and are based
+        // off the root node or another ligament object
+        m_elevator = root.append(new MechanismLigament2d("elevator", kElevatorMinimumLength, 90));
+        m_wrist =
+                m_elevator.append(
+                        new MechanismLigament2d("wrist", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
+
+        // post the mechanism to the dashboard
+        SmartDashboard.putData("Mech2d", mech);
     }
 
 
@@ -54,6 +85,8 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        m_elevator.setLength(kElevatorMinimumLength + m_elevatorEncoder.getDistance());
+        m_wrist.setAngle(m_wristPot.get());
     }
 
 
@@ -109,6 +142,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        m_elevatorMotor.set(m_joystick.getRawAxis(0));
+        m_wristMotor.set(m_joystick.getRawAxis(1));
     }
 
 

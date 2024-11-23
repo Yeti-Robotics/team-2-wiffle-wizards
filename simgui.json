@@ -97,6 +97,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Mech2d": "Mechanism2d",
       "/SmartDashboard/door bottom limit": "Digital Input",
       "/SmartDashboard/door kraken": "Motor Controller",
       "/SmartDashboard/door top limit": "Digital Input",
@@ -106,6 +107,24 @@
       "/SmartDashboard/elevator top limit": "Digital Input",
       "/SmartDashboard/intake kraken": "Motor Controller",
       "/SmartDashboard/roller kraken 2": "Motor Controller"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "bottom": 1476,
+        "height": 8.210550308227539,
+        "left": 150,
+        "right": 2961,
+        "top": 79,
+        "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Mech2d": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {
